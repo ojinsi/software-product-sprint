@@ -32,11 +32,9 @@ public class DataServlet extends HttpServlet {
   @Override
   public void init() {
     randomFacts = new ArrayList<>();
-    randomFacts.add("I love photography, but haven't been able to do much in college");
-    randomFacts.add("I'm a huge Roger Federer fan and cried when he lost at the Wimbledon 2019 Finals");
-    randomFacts.add("I have traveled to over 35 countries"); 
-    randomFacts.add("I used to be heavily involved in politics and met state politicans to lobby for bills"); 
-    randomFacts.add("My favorite band is the Beatles");
+    randomFacts.add("1) I am a huge Roger Federer fan and cried when he lost at the Wimbledon 2019 Finals");
+    randomFacts.add("2) I have traveled to over 35 countries"); 
+    randomFacts.add("3) My favorite band is the Beatles");
   }
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
