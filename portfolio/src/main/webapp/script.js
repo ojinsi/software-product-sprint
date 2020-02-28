@@ -27,8 +27,8 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-function sayHelloUsingArrowFunctions() {
-  fetch('/data').then(response => response.text()).then((hello) => {
-    document.getElementById('hello-container').innerText = hello;
+function funFactsWithArrowFunctions() {
+  fetch('/data').then(response => response.text()).then((funFact) => {
+    document.getElementById('funFacts-container').innerText = funFact;
   });
 }
