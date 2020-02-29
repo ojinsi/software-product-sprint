@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
 
   private List<String> randomFacts;
+  private List<String> comments;
 
   @Override
   public void init() {
@@ -48,4 +49,12 @@ public class DataServlet extends HttpServlet {
     String json = gson.toJson(randomFacts);
     return json;
   }
+
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.sendRedirect("/index.html");
+    String s = request.getParameter("comment");
+    comments.add(s);
 }
+}
+
+
