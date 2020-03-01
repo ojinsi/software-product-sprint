@@ -14,6 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,39 +28,40 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.data.Comment;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private List<String> randomFacts;
-  private List<String> comments;
-
-  @Override
-  public void init() {
-    randomFacts = new ArrayList<>();
-    randomFacts.add("1) I am a huge Roger Federer fan and cried when he lost at the Wimbledon 2019 Finals");
-    randomFacts.add("2) I have traveled to over 35 countries"); 
-    randomFacts.add("3) My favorite band is the Beatles");
-  }
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJsonUsingGson(randomFacts);
-    response.setContentType("text/html;");
-    response.getWriter().println(json);
-  }
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    List<Comment> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      String comment = (String) entity.getProperty("comment");
+      long timestamp = (long) entity.getProperty("timestamp");
+      Comment comment1 = new Comment(comment, timestamp);
+      comments.add(comment1);
+    }
 
-  private String convertToJsonUsingGson(List<String> randomFacts) {
     Gson gson = new Gson();
-    String json = gson.toJson(randomFacts);
-    return json;
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(comments));
   }
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.sendRedirect("/index.html");
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {    
     String s = request.getParameter("comment");
-    comments.add(s);
-}
+    long timestamp = System.currentTimeMillis();
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("comment", s);
+    commentEntity.setProperty("timestamp", timestamp);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+    response.sendRedirect("/index.html");
+   }
 }
 
 
