@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Omisa's Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="script.js"></script>
   </head>
   <body>
@@ -27,14 +28,31 @@
       <a href="https://www.linkedin.com/in/omisa-j-326636124/">LinkedIn</a>
       <p></p>
       <a href="https://github.com/ojinsi">GitHub</a>
-      <img src="images/pic1.jpg"/>
-      <button onclick="funFactsWithArrowFunctions()">Random Facts About Me</button>
-      <div id="funFacts-container"></div>
-      <form action="/index.html" method="POST">
-        <label for="comment">Comment Below!:</label><br>
-        <input type="text" name = "comment"><br>
-        <input type="submit" />
+      <p></p>
+          <h2>Coding nerds unite! Vote for your favorite programming language!</h2>
+    <div id="chart-container"></div>
+    <form action="/language-data" method="POST">
+        <select name="language">
+            <option value="Python">Python</option>
+            <option value="C++">C++</option>
+            <option value="C">C</option>
+            <option value="Java">Java</option>
+            <option value="Javascript">Javascript</option>
+            <option value="SML">SML</option>
+        </select>
+        <button>Submit</button>
       </form>
+      <p></p>
+      <img src="images/pic1.jpg"/>
+      <body onload="loadComments()">
+        <form method="POST" action="/data">
+            <label for="comment">Say hello! Comment below:</label><br>
+            <input type="text" name = "comment"><br>
+            <button>Submit</button>
+        </form>
+        <ul id="comment-container"></ul>
+      </body>
+      
       <p>Click here to get a random message:</p>
       <button onclick="addRandomGreeting()">Hello</button>
       <div id="greeting-container"></div>
