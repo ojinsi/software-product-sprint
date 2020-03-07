@@ -53,6 +53,16 @@ teachme ~/software-product-sprint/walkthroughs/week-3-libraries/image-analysis/i
 **Note:** This library requires Blobstore, so if you're interested in image
 analysis, make sure to finish the Blobstore project first!
 
+### Charts
+
+Google Charts allows you to embed an interactive chart in your webpage.
+
+Start the charts walkthrough by executing this command:
+
+```bash
+teachme ~/software-product-sprint/walkthroughs/week-3-libraries/charts/charts-walkthrough.md
+```
+
 ### Maps
 
 Google Maps allows you to embed an interactive map in your webpage.
@@ -81,4 +91,20 @@ Start the translation walkthrough by executing this command:
 
 ```bash
 teachme ~/software-product-sprint/walkthroughs/week-3-libraries/translation/translation-walkthrough.md
+```
+
+## Congratulations
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+Congratulations! Your portfolio should now contain a feature that uses a
+library! Make sure your
+[MVP](https://en.wikipedia.org/wiki/Minimum_viable_product) works and is
+submitted to your GitHub repo by the end of the week.
+
+To start the next set of projects, run the test-driven development intro
+walkthrough:
+
+```bash
+teachme ~/software-product-sprint/walkthroughs/week-4-tdd/intro/tdd-intro-walkthrough.md
 ```

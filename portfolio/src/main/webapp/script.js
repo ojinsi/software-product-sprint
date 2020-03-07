@@ -26,3 +26,25 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+function loadComments() {
+  console.log("Hello");
+  fetch('/data').then(response => response.json()).then((comments) => {
+    const commentListElement = document.getElementById('comment-container');
+    comments.forEach((comment) => {
+      commentListElement.appendChild(createCommentElement(comment));
+    })
+  });
+}
+
+/** Creates an element that represents a task, including its delete button. */
+function createCommentElement(comment) {
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment';
+
+  const titleElement = document.createElement('span');
+  titleElement.innerText = comment.comment;
+  commentElement.appendChild(titleElement);
+  return commentElement;
+}
+

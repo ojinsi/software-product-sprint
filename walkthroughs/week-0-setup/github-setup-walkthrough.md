@@ -99,7 +99,8 @@ To give your advisor access to your repo, add them as a collaborator.
 
 1.  Navigate to your repo's page in GitHub.
 2.  Go to the `Settings` tab.
-3.  Select `Collaborators`.
+3.  Select `Collaborators`. (*Note*: If you don't see this, 
+    look for `Manage Access` -> `Invite a Collaborator` instead)
 4.  Add your Project Advisor using their GitHub username or email address.
 
 Your advisor can now help with code reviews.
@@ -193,5 +194,5 @@ The next walkthrough will introduce the Google Cloud Shell environment. Run this
 command when you're ready:
 
 ```bash
-teachme ~/software-product-sprint/walkthroughs/week-0-setup/intro-walkthrough.md
+teachme ~/software-product-sprint/walkthroughs/week-1-setup/intro-walkthrough.md
 ```
