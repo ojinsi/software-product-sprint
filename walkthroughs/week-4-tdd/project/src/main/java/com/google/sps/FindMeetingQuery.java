@@ -15,9 +15,90 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
+    Collection<String> attendees = request.getAttendees();
+    long duration = request.getDuration();
+    boolean inattendance = false; 
+    
+    List<Event> newEvents = new ArrayList<Event> ();
+
+    if (duration > 1440)
+    {
+        return Arrays.asList();
+    }
+
+    for (Event event : events) {
+        inattendance = false;  
+        for (String attendee : attendees){ 
+            if (event.getAttendees().contains(attendee))
+            {
+                inattendance = true;
+            }
+        }
+        if (inattendance)
+        {
+            newEvents.add(event);
+        }
+    }
+
+    newEvents.sort(Comparator.comparing(Event::getWhen, TimeRange.ORDER_BY_START.thenComparing(TimeRange.ORDER_BY_END)));
+    List<TimeRange> results = new ArrayList<TimeRange> ();
+
+    if (newEvents.size()==0)
+    {
+        results.add(TimeRange.WHOLE_DAY);
+    }
+
+    if (newEvents.size()==1)
+    {
+        if (newEvents.get(0).getWhen().start()!=0)
+        {
+            results.add(TimeRange.fromStartDuration(0, newEvents.get(0).getWhen().start()));
+        }
+        if (newEvents.get(0).getWhen().end()!=1440)
+        {
+            results.add(TimeRange.fromStartDuration(newEvents.get(0).getWhen().end(), 1440 - newEvents.get(0).getWhen().end()));
+        }
+    }
+
+    for (int i = 0; i < newEvents.size()-1; i++)
+    { 
+        TimeRange currentTimeRange = newEvents.get(i).getWhen(); 
+        TimeRange nextTimeRange = newEvents.get(i+1).getWhen(); 
+        if (i==0 && currentTimeRange.start()!=0)
+        {
+            results.add(TimeRange.fromStartDuration(0, currentTimeRange.start()));
+        }
+        if (currentTimeRange.overlaps(nextTimeRange))
+        {
+            if (nextTimeRange.end()<=currentTimeRange.end())
+            {
+                newEvents.set(i+1, new Event("hi", currentTimeRange, new ArrayList<>())); 
+            }
+            else 
+            {
+                newEvents.set(i+1, new Event ("hello", TimeRange.fromStartDuration(currentTimeRange.start(), nextTimeRange.end()-currentTimeRange.start()), new ArrayList<>()));
+            }
+        }
+        else 
+        {
+            results.add(TimeRange.fromStartDuration(currentTimeRange.end(), nextTimeRange.start() - currentTimeRange.end())); 
+        }
+
+        if (i == newEvents.size()-2 && newEvents.get(i+1).getWhen().end()!=1440)
+        {
+            results.add(TimeRange.fromStartDuration(newEvents.get(i+1).getWhen().end(), 1440 - newEvents.get(i+1).getWhen().end()));
+        }
+    }
+
+    return results; 
+    
   }
 }
