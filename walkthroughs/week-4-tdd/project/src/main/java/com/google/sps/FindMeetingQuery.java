@@ -26,25 +26,22 @@ public final class FindMeetingQuery {
     Collection<String> attendees = request.getAttendees();
     long duration = request.getDuration();
     boolean inattendance = false; 
+    int entireDay = 1440;
     
-    List<Event> newEvents = new ArrayList<Event> ();
+    List<Event> newEvents = new ArrayList<Event>();
 
-    if (duration > 1440)
+    if (duration > entireDay)
     {
         return Arrays.asList();
     }
 
     for (Event event : events) {
-        inattendance = false;  
-        for (String attendee : attendees){ 
+        for (String attendee : attendees) { 
             if (event.getAttendees().contains(attendee))
             {
-                inattendance = true;
+                newEvents.add(event); 
+                break; 
             }
-        }
-        if (inattendance)
-        {
-            newEvents.add(event);
         }
     }
 
@@ -62,9 +59,9 @@ public final class FindMeetingQuery {
         {
             results.add(TimeRange.fromStartDuration(0, newEvents.get(0).getWhen().start()));
         }
-        if (newEvents.get(0).getWhen().end()!=1440)
+        if (newEvents.get(0).getWhen().end()!=entireDay)
         {
-            results.add(TimeRange.fromStartDuration(newEvents.get(0).getWhen().end(), 1440 - newEvents.get(0).getWhen().end()));
+            results.add(TimeRange.fromStartDuration(newEvents.get(0).getWhen().end(), entireDay - newEvents.get(0).getWhen().end()));
         }
     }
 
@@ -81,10 +78,13 @@ public final class FindMeetingQuery {
             if (nextTimeRange.end()<=currentTimeRange.end())
             {
                 newEvents.set(i+1, new Event("hi", currentTimeRange, new ArrayList<>())); 
+                nextTimeRange = currentTimeRange; 
             }
             else 
             {
-                newEvents.set(i+1, new Event ("hello", TimeRange.fromStartDuration(currentTimeRange.start(), nextTimeRange.end()-currentTimeRange.start()), new ArrayList<>()));
+                newEvents.set(i+1, new Event("hello", TimeRange.fromStartDuration(currentTimeRange.start(), nextTimeRange.end()-currentTimeRange.start()), 
+                new ArrayList<>()));
+                nextTimeRange = TimeRange.fromStartDuration(currentTimeRange.start(), nextTimeRange.end()-currentTimeRange.start());
             }
         }
         else 
@@ -92,13 +92,12 @@ public final class FindMeetingQuery {
             results.add(TimeRange.fromStartDuration(currentTimeRange.end(), nextTimeRange.start() - currentTimeRange.end())); 
         }
 
-        if (i == newEvents.size()-2 && newEvents.get(i+1).getWhen().end()!=1440)
+        if (i == newEvents.size()-2 && nextTimeRange.end()!=entireDay)
         {
-            results.add(TimeRange.fromStartDuration(newEvents.get(i+1).getWhen().end(), 1440 - newEvents.get(i+1).getWhen().end()));
+            results.add(TimeRange.fromStartDuration(nextTimeRange.end(), entireDay - nextTimeRange.end()));
         }
     }
 
     return results; 
-    
   }
 }

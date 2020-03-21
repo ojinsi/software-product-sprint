@@ -15,6 +15,12 @@
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
+const options = {
+      'title': 'Favorite Programming Language',
+      'width':600,
+      'height':500
+    };
+
 /** Fetches color data and uses it to create a chart. */
 function drawChart() {
   fetch('/language-data').then(response => response.json())
@@ -25,12 +31,6 @@ function drawChart() {
     Object.keys(languageVotes).forEach((language) => {
       data.addRow([language, languageVotes[language]]);
     });
-
-    const options = {
-      'title': 'Favorite Programming Language',
-      'width':600,
-      'height':500
-    };
 
     const chart = new google.visualization.ColumnChart(
         document.getElementById('chart-container'));
